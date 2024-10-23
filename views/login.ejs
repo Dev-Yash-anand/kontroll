@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <% if (error && error.length> 0) { %>
+        <div id="flash-message" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="block sm:inline">
+                <%= error %>
+            </span>
+        </div>
+        <% } %>
+    <div class="w-1/2 flex items-center justify-center h-screen">
+        <div class="w-full px-32">
+            <h2>Owner Login</h2>
+            <h4 class="text-2xl capitalize mb-5 tracking-tighter font-semibold">login your account</h4>
+            <form autocomplete="off" action="/owners/login" method="post">
+                <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200" type="username"
+                    placeholder="Username" name="username">
+                <input class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200"
+                    type="password" placeholder="Password" name="password">
+                <input class="px-5 block rounded-full py-3 mt-2 bg-blue-500 text-white" type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+    <script>
+        // Function to hide the flash message
+        function hideFlashMessage() {
+            const flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                flashMessage.style.transition = 'opacity 0.5s ease-in-out';
+                flashMessage.style.opacity = '0';
+                setTimeout(() => {
+                    flashMessage.style.display = 'none';
+                }, 500); // Wait for fade out animation to complete
+            }
+        }
+
+        // Set timeout to hide the message after 3 seconds
+        setTimeout(hideFlashMessage, 3000);
+    </script>
+</body>
+</html>

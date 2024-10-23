@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<style>
+    ::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 10px;
+    border: 2px solid #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #888;
+}
+</style>
+
+<body class="font-sans">
+    <nav class="w-full  items-center cursor-pointer fixed z-30 px-20 py-3 flex justify-between">
+        <h3 class="text-5xl text-white font-semibold">Kontroll</h3>
+        <% var loggedIn=typeof loggedIn !=='undefined' ? loggedIn : true %>
+            <% if(loggedIn) { %>
+                <div class="flex gap-5 text-white">
+                    <a href="">Shop.</a>
+                    <a href="">Cart</a>
+                    <a href="">My account</a>
+                    <a class="text-red-600 text-semibold" href="/users/logout">Logout</a>
+                </div>
+                <%} %>
+
+    </nav>
+<div class="w-full h-screen bg-black">
+    <video id="backgroundVideo" autoplay loop  src="https://cdn.shopify.com/videos/c/o/v/8cdff91433ef42ad875ed2da3b0c4213.mp4" class="w-full h-full -z-1 object-cover"></video>
+</div>
+    <% if(success.length>0){ %>
+        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500">
+            <span class="inline-block mt-1 mb-1 text-white">
+                <%= success %>
+            </span>
+        </div>
+        <% } %>
+    <div class="w-full min-h-[100vh] bg-black text-white flex items-start px-20 py-20">
+        <div class="w-[25%] flex h-screen flex-col items-start p-16">
+            <div class="flex items-center gap-2">
+                <h3>sort by</h3>
+                <form action="/shop" method="GET">
+                    <select class="border-[1px] text-black px-2 py-1" name="sortby" id="sortby" onchange="this.form.submit()">
+                        <option value="popular" <%=sortby==='popular' ? 'selected' : '' %>>Popular</option>
+                        <option value="newest" <%=sortby==='newest' ? 'selected' : '' %>>Newest</option>
+                    </select>
+                </form>
+            </div>
+            <div class="flex flex-col mt-20">
+                <a class="block w-fit mb-2" href="">New Collection</a>
+                <a class="block w-fit mb-2" href="">All Products</a>
+                <a class="block w-fit mb-2" href="">Discounted Products</a>
+            </div>
+            <div class="mt-32">
+                <a class="block w-fit mb-2" href="">Filter by :</a>
+                <a class="block w-fit mb-2" href="">Availability</a>
+                <a class="block w-fit mb-2" href="">Discount</a>
+            </div>
+        </div>
+        <div class="w-[75%] flex flex-col gap-5 h-screen p-16 overflow-auto">
+            <div class="flex items-start flex-wrap gap-14">
+                <% products.forEach(function(product){ %>
+                    <div class="w-[198px] border border-zinc-800 cursor-pointer">
+                        <div class="w-full h-52 flex items-center justify-center bg-[<%= product.bgcolor %>]">
+                            <!-- Check if image exists before trying to display it -->
+                            <% if (product.image) { %>
+                                <img class="h-full w-full object-contain transform transition-transform duration-500 ease-in-out hover:scale-105"
+                                    src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="<%= product.name %>">
+                            <% } else { %>
+                                <div class="text-white">No image available</div>
+                            <% } %>
+                        </div>
+                        <div
+                            class="flex justify-between bg-[<%= product.panelcolor %>] items-center px-4 py-4 text-[<%= product.textcolor %>]">
+                            <div>
+                                <h3>
+                                    <%= product.name %>
+                                </h3>
+                                <h4>₹ <%= product.price %>
+                                </h4>
+                            </div>
+                            <a class="w-7 h-7 flex items-center justify-center rounded-full bg-white"
+                                href="/addtocart/<%= product._id %>">
+                                <i class="ri-add-line text-black "></i>
+                            </a>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+
+    </div>
+    <div class="w-full h-[150px] bg-black border-t border-b border-zinc-800 gap-8 flex items-center justify-center">
+        <a class="transform transition-transform duration-300 ease-in-out hover:scale-110" target="_blank" href="https://www.instagram.com/anandyash198/?next=%2F"><i class="ri-instagram-line text-white text-2xl"></i></a>
+        <a class="transform transition-transform duration-300 ease-in-out hover:scale-110" target="_blank" href="https://www.linkedin.com/in/yash-anand-750a63256/"><i class="ri-linkedin-box-fill text-white text-2xl"></i></a>
+        <a class="transform transition-transform duration-300 ease-in-out hover:scale-110" target="_blank" href="https://github.com/Dev-Yash-anand"><i class="ri-github-fill text-white text-2xl"></i></a>
+    </div>
+    <%- include('./partials/footer') %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const video = document.getElementById('backgroundVideo');
+            video.muted = false; // Ensure the video is not muted
+            video.play(); // Attempt to play the video
+
+            // Add an event listener for a user interaction
+            document.body.addEventListener('click', () => {
+                video.play(); // Play the video when the user clicks anywhere on the page
+            });
+        });
+    </script>
